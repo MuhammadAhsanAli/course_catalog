@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  reverse-proxy:
+    image: traefik:v2.11
+    command:
+      - --api.insecure=true
+      - --providers.docker
+      - --entrypoints.http.address=:8083
+      - --entrypoints.mysql.address=:3307
+      - --providers.docker.exposedbydefault=true
+    ports:
+      - "8083:8083"
+      - "8082:8080"  # Change from 8080 to 8082
+      - "3307:3307"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE:  ${DATABASE}
+      MYSQL_USER:  ${DB_USER}
+      MYSQL_PASSWORD:  ${DB_PASSWORD}
+    volumes:
+        - ./database/volume:/var/lib/mysql
+    hostname: db.cc.localhost
+    labels:
+      - traefik.tcp.routers.mysql.entrypoints=mysql
+      - traefik.tcp.routers.mysql.rule=HostSNI(`*`)
+      - traefik.tcp.services.mysql.loadbalancer.server.port=3307
+    ports:
+      - 8001:3307
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api
+    depends_on:
+      - db
+    volumes:
+      - ./api/:/var/www/html/
+    stdin_open: true
+    tty: true
+    hostname: api.cc.localhost
+    labels:
+      - traefik.http.routers.api.rule=Host(`api.cc.localhost`)
+    command: >
+      sh -c "composer update --no-interaction --no-scripts --no-dev && apache2-foreground"
+
+  front:
+    build:
+      context: ./front_end
+      dockerfile: Dockerfile
+    container_name: front
+    depends_on:
+      - api
+    volumes:
+      - ./front_end/:/var/www/html/
+    stdin_open: true
+    tty: true
+    hostname: cc.localhost
+    labels:
+      - traefik.http.routers.front.rule=Host(`cc.localhost`)
+    command: >
+      sh -c "composer update --no-interaction --no-scripts --no-dev && apache2-foreground"

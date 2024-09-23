@@ -1,0 +1,85 @@
+/* Sidebar Styles */
+.sidebar {
+    padding-right: 1rem; /* Space between sidebar and main content */
+}
+
+.sidebar ul ul {
+    padding-left: 1rem; /* Indent child categories */
+}
+
+/* Indentations for deeper levels of categories */
+.sidebar ul ul ul {
+    padding-left: 1.5rem; /* Indent grandchild categories */
+}
+
+.sidebar ul ul ul ul {
+    padding-left: 2rem; /* Indent great-grandchild categories */
+}
+
+.sidebar li {
+    font-weight: bold; /* Bold for category names */
+    margin-top: 0.5rem; /* Space between category items */
+}
+
+.sidebar li a {
+    text-decoration: none; /* No underline by default */
+    color: inherit; /* Use inherited text color */
+}
+
+.sidebar li a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+/* Normal weight for subcategory links */
+.sidebar ul ul li,
+.sidebar ul ul ul li,
+.sidebar ul ul ul ul li {
+    font-weight: normal;
+}
+
+/* Card Image Styles */
+.card-img {
+    position: relative; /* For positioning overlays */
+}
+
+.card-img-overlay {
+    top: 0; /* Align overlay to top */
+    right: 0; /* Align overlay to right */
+    width: auto; /* Auto size for overlay */
+    height: auto; /* Auto size for overlay */
+}
+
+/* Badge Positioning */
+.badge-top-right {
+    position: absolute; /* Position badge over the image */
+    top: 10px; /* Distance from top */
+    right: 10px; /* Distance from right */
+    z-index: 1; /* Ensure badge appears above other elements */
+}
+
+/* Font Sizes */
+.font-medium {
+    font-size: medium; /* Medium font size for emphasis */
+    font-weight: bold; /* Bold weight */
+}
+
+.font-small {
+    font-size: small; /* Small font size for less emphasis */
+    font-weight: bold; /* Bold weight */
+}
+
+/* Media Queries for Responsive Design */
+@media (min-width: 769px) {
+    .title-truncate {
+        white-space: nowrap; /* Prevent text from wrapping */
+        overflow: hidden; /* Hide overflowed text */
+        text-overflow: ellipsis; /* Show ellipsis for overflow */
+    }
+
+    .description-truncate {
+        display: -webkit-box; /* For multi-line truncation */
+        -webkit-box-orient: vertical; /* Set orientation */
+        overflow: hidden; /* Hide overflowed text */
+        height: 3em; /* Limit height to 3 lines */
+    }
+}

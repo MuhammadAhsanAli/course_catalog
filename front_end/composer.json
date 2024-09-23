@@ -1,0 +1,19 @@
+{
+  "name": "frontend/course_catalog",
+  "description": "Frontend Course Catalog",
+  "require": {
+    "php": "^8.3",
+    "ext-pdo": "*",
+    "vlucas/phpdotenv": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "php -r 'file_exists(\"vendor/autoload.php\") || copy(\"vendor/autoload.php\", \"vendor/autoload.php\");'"
+    ]
+  }
+}
